@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ema Antovska — Game Design Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  /* ============ COLORS & TYPE (edit here to restyle everything) ============ */
+  :root {
+    --paper: #EEF1F5;      /* cool notebook paper */
+    --panel: #FFFFFF;
+    --ink: #1D2330;        /* main text */
+    --graphite: #5A6272;   /* secondary text */
+    --rule: #C9D0DB;       /* lines */
+    --pen: #2E4BD1;        /* ballpoint blue: the one accent */
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--body); font-size: 1.125rem; line-height: 1.65;
+    background-image: linear-gradient(var(--rule) 1px, transparent 1px);
+    background-size: 100% 2rem; background-attachment: fixed;
+    background-color: var(--paper);
+  }
+  body::before { /* soften the ruled lines */
+    content: ""; position: fixed; inset: 0; background: rgba(238,241,245,.82);
+    pointer-events: none; z-index: -1;
+  }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; }
+  a { color: var(--pen); text-underline-offset: 3px; }
+  a:focus-visible { outline: 3px solid var(--pen); outline-offset: 3px; border-radius: 2px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; }
+  .measure { max-width: 66ch; }
+
+  /* ============ HERO: the choice map ============ */
+  header.hero { padding: 4rem 0 2rem; }
+  .hero h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 700; letter-spacing: -0.02em; }
+  .hero .intro { font-size: 1.25rem; color: var(--graphite); margin: .75rem 0 0; max-width: 52ch; }
+  .contact { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; font-family: var(--display); font-size: 1rem; }
+
+  .map { margin-top: 2.5rem; }
+  .map svg { width: 100%; height: auto; display: block; }
+  .map .branch { fill: none; stroke: var(--pen); stroke-width: 2.5; stroke-linecap: round;
+    stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 1.4s ease-out forwards; }
+  .map .branch:nth-of-type(2) { animation-delay: .25s; }
+  .map .branch:nth-of-type(3) { animation-delay: .5s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .map .root { fill: var(--ink); }
+  .map .root-label { fill: var(--paper); font-family: var(--display); font-weight: 700; font-size: 20px; }
+  .map .node rect { fill: var(--panel); stroke: var(--ink); stroke-width: 2; transition: stroke .15s; }
+  .map .node text { font-family: var(--display); fill: var(--ink); }
+  .map .node .t { font-size: 20px; font-weight: 700; }
+  .map .node .s { font-size: 14px; fill: var(--graphite); }
+  .map a:hover rect, .map a:focus rect { stroke: var(--pen); stroke-width: 3; }
+  .map a:focus { outline: none; }
+  .map-list { display: none; }
+
+  /* ============ PROJECTS ============ */
+  section.project { padding: 4rem 0; border-top: 2px solid var(--ink); }
+  .project h2 { font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing: -0.01em; }
+  .tagline { font-size: 1.2rem; color: var(--graphite); margin: .5rem 0 1.5rem; font-style: italic; }
+  dl.meta { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1.25rem;
+    font-family: var(--display); font-size: .95rem; margin: 0 0 2rem; }
+  dl.meta dt { color: var(--graphite); }
+  dl.meta dd { margin: 0; }
+  .project h3 { font-size: 1.35rem; margin: 2.25rem 0 .5rem; }
+  .project p { margin: 0 0 1rem; }
+
+  figure { margin: 1.5rem 0; }
+  figure img, figure video { width: 100%; height: auto; display: block; border: 2px solid var(--ink); background: var(--panel); }
+  figcaption { font-size: .95rem; color: var(--graphite); margin-top: .5rem; max-width: 66ch; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .grid-2 figure { margin: 0; }
+  /* Placeholder shown until you add the real image file */
+  figure.missing img { display: none; }
+  figure.missing::before {
+    content: attr(data-placeholder); display: flex; align-items: center; justify-content: center;
+    min-height: 220px; padding: 1.5rem; text-align: center;
+    border: 2px dashed var(--graphite); color: var(--graphite); background: var(--panel);
+    font-family: var(--display); font-size: .95rem;
+  }
+  pre { background: var(--ink); color: #E8ECF3; padding: 1.25rem; overflow-x: auto;
+    font-size: .9rem; line-height: 1.5; border-radius: 2px; }
+  ol.steps { padding-left: 1.4rem; }
+  ol.steps li { margin-bottom: .6rem; padding-left: .25rem; }
+  ol.steps li::marker { font-family: var(--display); font-weight: 700; color: var(--pen); }
+  .note { border-left: 4px solid var(--pen); padding: .25rem 0 .25rem 1rem; margin: 1.5rem 0; }
+
+  footer { border-top: 2px solid var(--ink); padding: 3rem 0 4rem; font-family: var(--display); }
+  footer p { margin: .25rem 0; }
+
+  @media (max-width: 700px) {
+    body { font-size: 1.0625rem; }
+    .map svg { display: none; }
+    .map-list { display: block; list-style: none; padding: 0; margin: 0; border-left: 3px solid var(--pen); }
+    .map-list li { padding: .6rem 0 .6rem 1rem; font-family: var(--display); }
+    .map-list span { display: block; color: var(--graphite); font-size: .9rem; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .map .branch { animation: none; stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================================================================
+     HOW TO EDIT
+     1. Replace every [bracketed prompt] with your own words.
+     2. Put images in the /images folder using the exact file names below.
+        Until a file exists, a dashed placeholder box shows what goes there.
+     3. Delete any section or figure you don't need.
+     ====================================================================== -->
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Ema Antovska</h1>
+    <p class="intro">I design choices that matter: branching stories, game mechanics, and quests players want to solve together.</p>
+    <p class="contact">
+      <a href="mailto:emaantovska2005@gmail.com">emaantovska2005@gmail.com</a>
+      <a href="resume.pdf">Resume (PDF)</a>
+      <a href="https://linkedin.com/in/emaantovska">LinkedIn</a>
+    </p>
+
+    <nav class="map" aria-label="Projects">
+      <svg viewBox="0 0 1000 330" role="img" aria-labelledby="map-title">
+        <title id="map-title">A choice map branching from my name to three projects</title>
+        <path class="branch" d="M190 165 C 330 165, 330 55, 470 55"/>
+        <path class="branch" d="M190 165 L 470 165"/>
+        <path class="branch" d="M190 165 C 330 165, 330 275, 470 275"/>
+        <circle class="root" cx="120" cy="165" r="72"/>
+        <text class="root-label" x="120" y="171" text-anchor="middle">Start</text>
+
+        <a href="#zombies" class="node">
+          <rect x="470" y="15" width="500" height="80" rx="4"/>
+          <text class="t" x="494" y="50">Zombies quest design</text>
+          <text class="s" x="494" y="75">Original Easter egg concept and design doc</text>
+        </a>
+        <a href="#episode" class="node">
+          <rect x="470" y="125" width="500" height="80" rx="4"/>
+          <text class="t" x="494" y="160">Your Second Choice</text>
+          <text class="s" x="494" y="185">Branching interactive story on Episode</text>
+        </a>
+        <a href="#sprinkle" class="node">
+          <rect x="470" y="235" width="500" height="80" rx="4"/>
+          <text class="t" x="494" y="270">Sprinkle Saver</text>
+          <text class="s" x="494" y="295">Arcade platformer in JavaScript</text>
+        </a>
+      </svg>
+      <!-- Shown on phones instead of the diagram -->
+      <ul class="map-list">
+        <li><a href="#zombies">Zombies quest design</a><span>Original Easter egg concept and design doc</span></li>
+        <li><a href="#episode">Your Second Choice</a><span>Branching interactive story on Episode</span></li>
+        <li><a href="#sprinkle">Sprinkle Saver</a><span>Arcade platformer in JavaScript</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ======================= PROJECT 1: ZOMBIES QUEST ======================= -->
+<section class="project" id="zombies">
+  <div class="wrap">
+    <h2>[Quest name]: a Zombies Easter egg</h2>
+    <p class="tagline">[One sentence hook, e.g. "A four-player quest to restart a flooded research lab before the power fails."]</p>
+    <dl class="meta">
+      <dt>Type</dt><dd>Original quest concept and design document</dd>
+      <dt>Players</dt><dd>1–4, co-op</dd>
+      <dt>Tools</dt><dd>[Hand sketches, Figma, Miro, etc.]</dd>
+      <dt>Date</dt><dd>[Month Year]</dd>
+    </dl>
+
+    <div class="measure">
+      <h3>Concept</h3>
+      <p>[The map setting and story hook in two or three sentences. What happened here, and why are players the ones who can fix it?]</p>
+    </div>
+
+    <figure data-placeholder="Add images/zombies-map.jpg: your map sketch with each quest step marked">
+      <img src="images/zombies-map.jpg" alt="Hand-drawn map sketch marking each quest step">
+      <figcaption>[Caption: what the map shows and how the layout guides players between steps.]</figcaption>
+    </figure>
+
+    <div class="measure">
+      <h3>Quest flow</h3>
+      <ol class="steps">
+        <li>[Step 1: what triggers the quest and how players first notice it.]</li>
+        <li>[Step 2: the first task and the clue that points to the next one.]</li>
+        <li>[Step 3: a puzzle or event, and how it changes while zombies keep coming.]</li>
+        <li>[Step 4: a moment that requires players to split up or coordinate.]</li>
+        <li>[Final step: the boss, event, or challenge that ends the quest.]</li>
+      </ol>
+
+      <h3>How players discover what to do</h3>
+      <p>[Explain your hints without a tutorial: audio lines, visual cues, lighting, objects that react when players get close.]</p>
+
+      <h3>Co-op and pacing</h3>
+      <p>[How four players share tasks, what happens if someone goes down, and how quest steps fit between zombie rounds so tension builds.]</p>
+
+      <h3>The reward</h3>
+      <p>[What finishing gives players and why it feels earned.]</p>
+
+      <p class="note">[Optional: one design risk you considered and how you'd test it in a playtest.]</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PROJECT 2: EPISODE STORY ======================= -->
+<section class="project" id="episode">
+  <div class="wrap">
+    <h2>Your Second Choice</h2>
+    <p class="tagline">A multi-episode interactive story where player choices carry consequences across episodes.</p>
+    <dl class="meta">
+      <dt>Role</dt><dd>Writer, narrative designer, scripter</dd>
+      <dt>Tools</dt><dd>Episode scripting, custom overlays, background art, animation sequencing</dd>
+      <dt>Dates</dt><dd>February 2026 – present</dd>
+      <dt>Play</dt><dd><a href="http://episodeinteractive.com/s/5561537734672384">Playtest build</a></dd>
+    </dl>
+
+    <div class="measure">
+      <h3>Goal</h3>
+      <p>[What experience you wanted players to have, in one or two sentences.]</p>
+    </div>
+
+    <figure data-placeholder="Add images/episode-choice-map.png: your flowchart of branches, splits, and where paths rejoin">
+      <img src="images/episode-choice-map.png" alt="Flowchart of the story's branching choices">
+      <figcaption>[Caption: which choices matter most, and how you kept branches manageable.]</figcaption>
+    </figure>
+
+    <div class="grid-2">
+      <figure data-placeholder="Add images/episode-scene-1.jpg">
+        <img src="images/episode-scene-1.jpg" alt="[Describe the scene]">
+        <figcaption>[The design decision behind this scene.]</figcaption>
+      </figure>
+      <figure data-placeholder="Add images/episode-scene-2.jpg">
+        <img src="images/episode-scene-2.jpg" alt="[Describe the scene]">
+        <figcaption>[The design decision behind this scene.]</figcaption>
+      </figure>
+    </div>
+
+    <div class="measure">
+      <h3>Design process</h3>
+      <p>[How you plan an episode: outlining, mapping choices, scripting scenes, testing.]</p>
+
+      <h3>Under the hood</h3>
+      <p>[One sentence on what this snippet does.]</p>
+    </div>
+<pre><code>[Paste a short script snippet here, e.g. an animation sequence or overlay setup.]</code></pre>
+
+    <div class="measure">
+      <h3>What playtesting changed</h3>
+      <p>[Something testers struggled with or reacted to, and what you changed because of it.]</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PROJECT 3: SPRINKLE SAVER ======================= -->
+<section class="project" id="sprinkle">
+  <div class="wrap">
+    <h2>Sprinkle Saver</h2>
+    <p class="tagline">A browser arcade platformer built for charity: water.</p>
+    <dl class="meta">
+      <dt>Role</dt><dd>Solo designer and developer</dd>
+      <dt>Tools</dt><dd>JavaScript, HTML5, CSS</dd>
+      <dt>Dates</dt><dd>June – August 2025</dd>
+      <dt>Play</dt><dd><a href="https://emaa99.github.io/Sprinkle-Saver-finalgame/">Play in your browser</a></dd>
+    </dl>
+
+    <figure data-placeholder="Add images/sprinkle-gameplay.gif: a 5–10 second gameplay clip">
+      <img src="images/sprinkle-gameplay.gif" alt="Gameplay clip of Sprinkle Saver">
+      <figcaption>[What's happening in the clip.]</figcaption>
+    </figure>
+
+    <div class="measure">
+      <h3>Core loop</h3>
+      <p>[What the player does over and over, and why it's fun, in one or two sentences.]</p>
+
+      <h3>A mechanic I'm proud of</h3>
+      <p>[How it works, why you designed it that way, and the feedback it gives the player.]</p>
+
+      <h3>What I'd change now</h3>
+      <p>[One honest improvement, which shows you can critique your own work.]</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Ema Antovska, Columbia University, Financial Economics with a minor in Computer Science</p>
+    <p><a href="mailto:emaantovska2005@gmail.com">emaantovska2005@gmail.com</a></p>
+  </div>
+</footer>
+
+<script>
+  // Show a labeled placeholder box when an image file hasn't been added yet
+  document.querySelectorAll('figure img').forEach(function (img) {
+    function mark() { img.closest('figure').classList.add('missing'); }
+    if (img.complete && img.naturalWidth === 0) mark();
+    img.addEventListener('error', mark);
+  });
+</script>
+</body>
+</html>
