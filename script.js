@@ -1,5 +1,5 @@
 const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+ 
 // ===== Placeholder boxes for images you haven't added yet =====
 function markMissing(root) {
   root.querySelectorAll('figure img').forEach(img => {
@@ -8,7 +8,7 @@ function markMissing(root) {
     img.addEventListener('error', mark);
   });
 }
-
+ 
 // ===== Click an image to view it full-screen =====
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = lightbox ? lightbox.querySelector('img') : null;
@@ -24,10 +24,10 @@ function enableLightbox(root) {
   });
 }
 if (lightbox) lightbox.addEventListener('click', () => lightbox.close());
-
+ 
 markMissing(document);
 enableLightbox(document);
-
+ 
 // ===== Loading screen =====
 (function () {
   const loader = document.getElementById('loader');
@@ -37,13 +37,13 @@ enableLightbox(document);
   };
   if (!loader) { introDone(); return; }
   loader.classList.add('js-ready'); // the script is running, so turn off the CSS safety net
-
+ 
   const finish = () => {
     loader.classList.add('done');
     document.body.classList.remove('loading');
     introDone();
   };
-
+ 
   // Show the intro once per visit, and skip it for people who prefer reduced motion
   let seen = false;
   try { seen = sessionStorage.getItem('introSeen') === '1'; sessionStorage.setItem('introSeen', '1'); } catch (e) {}
@@ -52,9 +52,9 @@ enableLightbox(document);
     finish();
     return;
   }
-
+ 
   document.body.classList.add('loading');
-
+ 
   const line1 = document.getElementById('line1');
   const line2 = document.getElementById('line2');
   const fill = document.getElementById('loaderFill');
@@ -63,9 +63,9 @@ enableLightbox(document);
   const btn = document.getElementById('loaderBtn');
   const duration = 3200; // how long the bar takes to fill, in milliseconds
   let start = null, swapped = false;
-
+ 
   setTimeout(() => line1.classList.add('show'), 200);
-
+ 
   function step(now) {
     if (!start) start = now;
     const t = Math.min((now - start) / duration, 1);
@@ -73,7 +73,7 @@ enableLightbox(document);
     const value = Math.round(eased * 100);
     fill.style.width = value + '%';
     pct.textContent = value + '%';
-
+ 
     if (!swapped && value >= 80) { // swap the text near the end
       swapped = true;
       line1.classList.replace('show', 'hide');
@@ -82,7 +82,7 @@ enableLightbox(document);
     if (t < 1) requestAnimationFrame(step);
     else setTimeout(showButton, 400);
   }
-
+ 
   // When the bar is full, turn it into the Welcome button
   function showButton() {
     progress.classList.add('hide');
@@ -91,44 +91,48 @@ enableLightbox(document);
       btn.focus({ preventScroll: true }); // so pressing Enter also works
     }, 250);
   }
-
+ 
   btn.addEventListener('click', finish);
   requestAnimationFrame(step);
 })();
-
+ 
 // ===== Mind map: lines that follow the bouncing orb, and branches that sprout =====
 (function () {
   const hub = document.getElementById('hub');
   if (!hub) return;
   const svg = document.getElementById('hubLines');
-  const orb = document.getElementById('orb');
+  const orb = document.getElementById('orb') || hub.querySelector('.orb');
+  if (!orb) { hub.classList.add('drawn'); return; }
   const NS = 'http://www.w3.org/2000/svg';
   const isPhone = () => matchMedia('(max-width: 700px)').matches;
   const noHover = matchMedia('(hover: none)').matches;
-
+ 
   // Your photo: if it isn't there yet, show the plain glowing sphere instead
   const photo = orb.querySelector('.orb-photo');
   const noPhoto = () => { orb.classList.add('no-photo'); if (photo) photo.remove(); };
+  if (!photo) orb.classList.add('no-photo');
   if (photo) {
     if (photo.complete && photo.naturalWidth === 0) noPhoto();
     photo.addEventListener('error', noPhoto);
   }
-
+ 
   // Sprout pictures: if one is missing, the letters underneath show instead
   hub.querySelectorAll('.sprout-bubble img').forEach(img => {
     if (img.complete && img.naturalWidth === 0) img.remove();
     img.addEventListener('error', () => img.remove());
   });
-
+ 
   const makePath = (cls, length) => {
     const p = document.createElementNS(NS, 'path');
     p.setAttribute('class', cls);
     p.setAttribute('pathLength', length);
     return p;
   };
-
-  const branches = [...hub.querySelectorAll('.branch')].map((el, i) => {
-    const node = el.querySelector('.node');
+ 
+  // Each branch is a .branch group (older pages without groups use the branch button itself)
+  const groups = hub.querySelectorAll('.branch').length ? [...hub.querySelectorAll('.branch')] : [...hub.querySelectorAll('.node')];
+  const branches = groups.map((el, i) => {
+    const node = el.classList.contains('node') ? el : el.querySelector('.node');
     const line = makePath('hub-line', '1');
     line.style.transitionDelay = (i * 0.2) + 's';
     const flow = makePath('hub-flow', '100');
@@ -141,7 +145,7 @@ enableLightbox(document);
     svg.append(line, flow, ...sprouts.map(s => s.line));
     return { el, node, line, flow, sprouts };
   });
-
+ 
   const centre = (el, box) => {
     const r = el.getBoundingClientRect();
     return [r.left + r.width / 2 - box.left, r.top + r.height / 2 - box.top];
@@ -154,7 +158,7 @@ enableLightbox(document);
     const my = (y1 + y2) / 2;
     return `M${x1} ${y1} C${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`;
   };
-
+ 
   // Place a branch's bubbles in a ring all around it (on phones, in an arc underneath)
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   function layout(b) {
@@ -167,7 +171,7 @@ enableLightbox(document);
     const edge = phone ? 36 : 44;
     const minX = -box.left + edge, maxX = innerWidth - box.left - edge; // keep bubbles on screen
     const minY = edge, maxY = box.height + 30;
-
+ 
     if (phone) {
       const spacing = 80, width = spacing * (n - 1);
       const startX = clamp(nx - width / 2, minX, maxX - width);
@@ -179,7 +183,7 @@ enableLightbox(document);
       });
       return;
     }
-
+ 
     const [ox, oy] = centre(orb, box);
     const towardOrb = Math.atan2(oy - ny, ox - nx);
     const gap = 110 * Math.PI / 180;           // leave room for the orb and the line coming from it
@@ -203,7 +207,7 @@ enableLightbox(document);
       s.el.dataset.side = side;
     });
   }
-
+ 
   function update() {
     const box = hub.getBoundingClientRect();
     const [x1, y1] = centre(orb, box);
@@ -218,7 +222,7 @@ enableLightbox(document);
       });
     });
   }
-
+ 
   // Open and close branches
   let openBranch = null, closeTimer = null;
   function open(b) {
@@ -242,7 +246,7 @@ enableLightbox(document);
     if (openBranch === b) { openBranch = null; hub.classList.remove('has-open'); }
   }
   const closeSoon = b => { clearTimeout(closeTimer); closeTimer = setTimeout(() => close(b), 350); };
-
+ 
   branches.forEach(b => {
     // Mouse: open while hovering the branch or its bubbles
     b.el.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') open(b); });
@@ -270,7 +274,7 @@ enableLightbox(document);
   document.addEventListener('click', e => { if (openBranch && !openBranch.el.contains(e.target)) close(openBranch); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && openBranch) close(openBranch); });
   addEventListener('resize', () => { if (openBranch) layout(openBranch); });
-
+ 
   // Redraw every frame while the map is on screen, so the lines stay attached
   let running = false;
   const loop = () => { update(); if (running) requestAnimationFrame(loop); };
@@ -281,20 +285,20 @@ enableLightbox(document);
     startLoop();
   }
   update();
-
+ 
   // Draw the lines once the intro is finished
   const draw = () => requestAnimationFrame(() => hub.classList.add('drawn'));
   if (window.introDone) draw();
   else document.addEventListener('intro:done', draw, { once: true });
 })();
-
+ 
 // ===== Project tiles: open into an expanded view =====
 (function () {
   const modal = document.getElementById('projectModal');
   const body = document.getElementById('modalBody');
   if (!modal || !body || typeof modal.showModal !== 'function') return;
   let lastButton = null;
-
+ 
   function open(tile, button, origin) {
     const template = tile.querySelector('template.tile-detail');
     if (!template) return;
@@ -303,18 +307,18 @@ enableLightbox(document);
     if (title) title.id = 'modalTitle';
     markMissing(body);
     enableLightbox(body);
-
+ 
     modal.classList.remove('closing');
     modal.showModal();
     modal.scrollTop = 0;
-
+ 
     // Grow the window out of the tile that was clicked
     const t = (origin || tile).getBoundingClientRect();
     const m = modal.getBoundingClientRect();
     modal.style.transformOrigin = `${t.left + t.width / 2 - m.left}px ${t.top + t.height / 2 - m.top}px`;
     lastButton = button;
   }
-
+ 
   function close() {
     if (!modal.open || modal.classList.contains('closing')) return;
     if (prefersReducedMotion) { modal.close(); return; }
@@ -327,13 +331,13 @@ enableLightbox(document);
     };
     modal.addEventListener('animationend', done);
   }
-
+ 
   // Lets the mind-map bubbles open a project directly
   window.openProject = (id, origin) => {
     const tile = document.getElementById('project-' + id);
     if (tile) open(tile, (origin && origin.closest('a')) || origin, origin);
   };
-
+ 
   document.querySelectorAll('.tile').forEach(tile => {
     const button = tile.querySelector('.tile-btn');
     if (button) button.addEventListener('click', () => open(tile, button));
@@ -343,7 +347,7 @@ enableLightbox(document);
   modal.addEventListener('click', e => { if (e.target === modal) close(); }); // click outside the window
   modal.addEventListener('close', () => { if (lastButton) lastButton.focus({ preventScroll: true }); });
 })();
-
+ 
 // ===== Reveal sections as they scroll into view =====
 (function () {
   const targets = document.querySelectorAll(
@@ -363,3 +367,4 @@ enableLightbox(document);
   }, { threshold: 0.15 });
   targets.forEach(el => observer.observe(el));
 })();
+ 
