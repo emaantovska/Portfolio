@@ -10,15 +10,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="loading">
+<body>
 
-<div id="loader" aria-hidden="true">
+<div id="loader">
   <div class="loader-text">
     <p class="loader-line" id="line1">Hi, I'm Ema</p>
     <p class="loader-line" id="line2">This is my portfolio</p>
   </div>
-  <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
-  <p class="loader-pct" id="loaderPct">0%</p>
+  <div class="loader-control">
+    <div class="loader-progress" id="loaderProgress">
+      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <p class="loader-pct" id="loaderPct">0%</p>
+    </div>
+    <button class="loader-btn" id="loaderBtn" type="button">Welcome</button>
+  </div>
 </div>
 
 <header class="hero">

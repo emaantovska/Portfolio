@@ -45,17 +45,27 @@ document.addEventListener('keydown', e => {
 (function () {
   const loader = document.getElementById('loader');
   if (!loader) return;
+  loader.classList.add('js-ready'); // the script is running, so turn off the CSS safety net
+
   const finish = () => { loader.classList.add('done'); document.body.classList.remove('loading'); };
 
   // Show the intro once per visit, and skip it for people who prefer reduced motion
   let seen = false;
   try { seen = sessionStorage.getItem('introSeen') === '1'; sessionStorage.setItem('introSeen', '1'); } catch (e) {}
-  if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+  if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    loader.style.transition = 'none';
+    finish();
+    return;
+  }
+
+  document.body.classList.add('loading');
 
   const line1 = document.getElementById('line1');
   const line2 = document.getElementById('line2');
   const fill = document.getElementById('loaderFill');
   const pct = document.getElementById('loaderPct');
+  const progress = document.getElementById('loaderProgress');
+  const btn = document.getElementById('loaderBtn');
   const duration = 3200; // how long the bar takes to fill, in milliseconds
   let start = null, swapped = false;
 
@@ -75,7 +85,18 @@ document.addEventListener('keydown', e => {
       setTimeout(() => line2.classList.add('show'), 350);
     }
     if (t < 1) requestAnimationFrame(step);
-    else setTimeout(finish, 1000); // hold "This is my portfolio" for a moment
+    else setTimeout(showButton, 400);
   }
+
+  // When the bar is full, turn it into the Welcome button
+  function showButton() {
+    progress.classList.add('hide');
+    setTimeout(() => {
+      btn.classList.add('show');
+      btn.focus({ preventScroll: true }); // so pressing Enter also works
+    }, 250);
+  }
+
+  btn.addEventListener('click', finish);
   requestAnimationFrame(step);
 })();

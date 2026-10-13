@@ -133,15 +133,24 @@ figure img:hover { transform: translateY(-4px); box-shadow: 6px 6px 0 var(--pen)
 body.loading { overflow: hidden; }
 body.loading .map .branch { animation-play-state: paused; }
 
+/* The page fades in after the intro */
+.hero, main, footer { transition: opacity .9s ease .15s; }
+body.loading .hero, body.loading main, body.loading footer { opacity: 0; }
+
 #loader {
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
   background: radial-gradient(circle at 50% 40%, #1B2B4D 0%, #0B1426 70%);
-  transition: opacity .7s ease, visibility .7s;
-  animation: loaderFailsafe 0s 8s forwards; /* hides the loader if anything goes wrong */
+  transition: opacity .8s ease, visibility .8s;
+  animation: loaderFailsafe 0s 8s forwards; /* only used if the script never runs */
 }
+#loader.js-ready { animation: none; }
 #loader.done { opacity: 0; visibility: hidden; }
 @keyframes loaderFailsafe { to { opacity: 0; visibility: hidden; } }
+
+/* A slight zoom as the intro fades away */
+.loader-text, .loader-control { transition: transform .8s ease; }
+#loader.done .loader-text, #loader.done .loader-control { transform: scale(1.06); }
 
 .loader-text { position: relative; height: 4.5rem; width: 100%; }
 .loader-line {
@@ -155,6 +164,15 @@ body.loading .map .branch { animation-play-state: paused; }
 .loader-line.show { opacity: 1; transform: none; }
 .loader-line.hide { opacity: 0; transform: translateY(-10px) scale(.96); }
 
+/* The bar and the button share the same spot */
+.loader-control { display: grid; place-items: center; min-height: 5.5rem; }
+.loader-progress, .loader-btn { grid-area: 1 / 1; }
+.loader-progress {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  transition: opacity .4s ease, transform .4s ease;
+}
+.loader-progress.hide { opacity: 0; transform: scale(.92); }
+
 .loader-bar {
   width: min(360px, 80vw); height: 14px; border-radius: 999px; overflow: hidden;
   background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.35);
@@ -167,4 +185,23 @@ body.loading .map .branch { animation-play-state: paused; }
 .loader-pct {
   margin: 0; font-family: "Fredoka", sans-serif; font-weight: 600;
   color: #C9D6F0; letter-spacing: .08em; font-variant-numeric: tabular-nums;
+}
+
+/* The Welcome button */
+.loader-btn {
+  font-family: "Fredoka", "Trebuchet MS", sans-serif; font-weight: 700;
+  font-size: 1.5rem; letter-spacing: .04em; color: #0B1426;
+  padding: .7rem 2.6rem; border: 2px solid #fff; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(90deg, #8FB4FF, #FFFFFF);
+  box-shadow: 0 0 14px rgba(143,180,255,.9), 0 0 36px rgba(143,180,255,.45);
+  opacity: 0; visibility: hidden; transform: scale(.85);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.34,1.56,.64,1), visibility .5s;
+}
+.loader-btn.show { opacity: 1; visibility: visible; transform: none; animation: pulse 2s ease-in-out .6s infinite; }
+.loader-btn.show:hover { transform: scale(1.06); }
+.loader-btn.show:active { transform: scale(.97); }
+.loader-btn:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(143,180,255,.9), 0 0 36px rgba(143,180,255,.45); }
+  50% { box-shadow: 0 0 22px rgba(255,255,255,.95), 0 0 56px rgba(143,180,255,.7); }
 }
