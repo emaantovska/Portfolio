@@ -48,7 +48,7 @@ a:focus-visible { outline: 3px solid var(--pen); outline-offset: 3px; border-rad
   width: 100%; padding-top: 1.5rem; padding-bottom: 1rem;
 }
 .brand { display: inline-flex; align-items: center; gap: .45rem; font-family: var(--display); font-weight: 700; font-size: 1.25rem; }
-.brand-icon { height: 1.4em; width: auto; image-rendering: pixelated; }
+.brand-icon { height: 2.1em; width: auto; image-rendering: pixelated; }
 .contact { display: flex; gap: 1.25rem; font-family: var(--display); font-size: 1rem; }
 
 .hub { position: relative; flex: 1; width: 100%; max-width: 1040px; min-height: 480px; margin: 0 auto; }
