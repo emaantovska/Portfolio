@@ -41,3 +41,41 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') lightbox.classList.remove('open');
 });
   
+// ===== Loading screen =====
+(function () {
+  const loader = document.getElementById('loader');
+  if (!loader) return;
+  const finish = () => { loader.classList.add('done'); document.body.classList.remove('loading'); };
+
+  // Show the intro once per visit, and skip it for people who prefer reduced motion
+  let seen = false;
+  try { seen = sessionStorage.getItem('introSeen') === '1'; sessionStorage.setItem('introSeen', '1'); } catch (e) {}
+  if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+
+  const line1 = document.getElementById('line1');
+  const line2 = document.getElementById('line2');
+  const fill = document.getElementById('loaderFill');
+  const pct = document.getElementById('loaderPct');
+  const duration = 3200; // how long the bar takes to fill, in milliseconds
+  let start = null, swapped = false;
+
+  setTimeout(() => line1.classList.add('show'), 200);
+
+  function step(now) {
+    if (!start) start = now;
+    const t = Math.min((now - start) / duration, 1);
+    const eased = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // smooth start and finish
+    const value = Math.round(eased * 100);
+    fill.style.width = value + '%';
+    pct.textContent = value + '%';
+
+    if (!swapped && value >= 80) { // swap the text near the end
+      swapped = true;
+      line1.classList.replace('show', 'hide');
+      setTimeout(() => line2.classList.add('show'), 350);
+    }
+    if (t < 1) requestAnimationFrame(step);
+    else setTimeout(finish, 1000); // hold "This is my portfolio" for a moment
+  }
+  requestAnimationFrame(step);
+})();

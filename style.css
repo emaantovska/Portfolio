@@ -1,13 +1,13 @@
 /* ============ COLORS & TYPE (edit here to restyle everything) ============ */
   :root {
-    --paper: #EEF1F5;      /* cool notebook paper */
-    --panel: #FFFFFF;
-    --ink: #1D2330;        /* main text */
-    --graphite: #5A6272;   /* secondary text */
-    --rule: #C9D0DB;       /* lines */
-    --pen: #2E4BD1;        /* ballpoint blue: the one accent */
-    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --paper: #0F1A2E;     /* navy background */
+  --panel: #16233D;     /* cards and boxes */
+  --ink: #E8EDF5;       /* main text */
+  --graphite: #9AA8C0;  /* secondary text */
+  --rule: #1E2C48;      /* notebook lines */
+  --pen: #8FB4FF;       /* glowing blue accent */
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -19,7 +19,7 @@
     background-color: var(--paper);
   }
   body::before { /* soften the ruled lines */
-    content: ""; position: fixed; inset: 0; background: rgba(238,241,245,.82);
+    content: ""; position: fixed; inset: 0; background: rgba(15,26,46,.85);
     pointer-events: none; z-index: -1;
   }
   h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; }
@@ -75,7 +75,7 @@
     border: 2px dashed var(--graphite); color: var(--graphite); background: var(--panel);
     font-family: var(--display); font-size: .95rem;
   }
-  pre { background: var(--ink); color: #E8ECF3; padding: 1.25rem; overflow-x: auto;
+  pre { background: #0A1222; color: #E8ECF3; padding: 1.25rem; overflow-x: auto;
     font-size: .9rem; line-height: 1.5; border-radius: 2px; }
   ol.steps { padding-left: 1.4rem; }
   ol.steps li { margin-bottom: .6rem; padding-left: .25rem; }
@@ -127,4 +127,44 @@ figure img:hover { transform: translateY(-4px); box-shadow: 6px 6px 0 var(--pen)
   .reveal { opacity: 1; transform: none; transition: none; }
   figure img, .lightbox, .lightbox img { transition: none; }
   #zombies h2.visible { animation: none; }
+}
+
+/* ===== Loading screen ===== */
+body.loading { overflow: hidden; }
+body.loading .map .branch { animation-play-state: paused; }
+
+#loader {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+  background: radial-gradient(circle at 50% 40%, #1B2B4D 0%, #0B1426 70%);
+  transition: opacity .7s ease, visibility .7s;
+  animation: loaderFailsafe 0s 8s forwards; /* hides the loader if anything goes wrong */
+}
+#loader.done { opacity: 0; visibility: hidden; }
+@keyframes loaderFailsafe { to { opacity: 0; visibility: hidden; } }
+
+.loader-text { position: relative; height: 4.5rem; width: 100%; }
+.loader-line {
+  position: absolute; inset: 0; margin: 0; text-align: center;
+  font-family: "Fredoka", "Trebuchet MS", sans-serif; font-weight: 700;
+  font-size: clamp(2rem, 7vw, 3.5rem); color: #fff;
+  text-shadow: 0 0 8px rgba(255,255,255,.8), 0 0 22px rgba(143,180,255,.7), 0 0 44px rgba(143,180,255,.45);
+  opacity: 0; transform: translateY(10px) scale(.96);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.34,1.56,.64,1);
+}
+.loader-line.show { opacity: 1; transform: none; }
+.loader-line.hide { opacity: 0; transform: translateY(-10px) scale(.96); }
+
+.loader-bar {
+  width: min(360px, 80vw); height: 14px; border-radius: 999px; overflow: hidden;
+  background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.35);
+}
+.loader-fill {
+  width: 0%; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #8FB4FF, #FFFFFF);
+  box-shadow: 0 0 14px rgba(143,180,255,.9);
+}
+.loader-pct {
+  margin: 0; font-family: "Fredoka", sans-serif; font-weight: 600;
+  color: #C9D6F0; letter-spacing: .08em; font-variant-numeric: tabular-nums;
 }
