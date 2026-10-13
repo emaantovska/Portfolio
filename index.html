@@ -41,24 +41,58 @@
   <div class="hub" id="hub">
     <svg class="hub-lines" id="hubLines" aria-hidden="true"></svg>
 
+    <!-- The Start orb: your photo, glowing. Hover shows "Start". -->
     <a class="orb-wrap" href="#about" aria-label="Start: go to About me">
       <span class="orb-ring"></span>
       <span class="orb-shadow"></span>
-      <span class="orb"><span class="orb-label">Start</span></span>
+      <span class="orb" id="orb">
+        <img class="orb-photo" src="images/me.jpg" alt="">
+        <span class="orb-label">Start</span>
+      </span>
     </a>
 
-    <a class="node node--about" href="#about" style="--d: .3s">
-      <span class="node-title">About</span>
-      <span class="node-sub">Who I am</span>
-    </a>
-    <a class="node node--projects" href="#projects" style="--d: .5s">
-      <span class="node-title">Projects</span>
-      <span class="node-sub">Games and websites</span>
-    </a>
-    <a class="node node--zombies" href="#zombies" style="--d: .7s">
-      <span class="node-title">Zombies</span>
-      <span class="node-sub">Easter egg design</span>
-    </a>
+    <!-- Branch: About -->
+    <div class="branch">
+      <a class="node node--about" href="#about" style="--d: .3s" aria-expanded="false">
+        <span class="node-title">About</span>
+        <span class="node-sub">Who I am</span>
+      </a>
+      <div class="sprouts">
+        <a class="sprout" href="#about"><span class="sprout-bubble" style="--g: var(--grad-1)"><span class="sprout-initial">C</span><img src="images/icons/columbia.png" alt=""></span><span class="sprout-label">Columbia</span></a>
+        <a class="sprout" href="#about"><span class="sprout-bubble" style="--g: var(--grad-3)"><span class="sprout-initial">MK</span><img src="images/icons/macedonia.png" alt=""></span><span class="sprout-label">North Macedonia</span></a>
+        <a class="sprout" href="#about"><span class="sprout-bubble" style="--g: var(--grad-5)"><span class="sprout-initial">Aa</span><img src="images/icons/languages.png" alt=""></span><span class="sprout-label">Languages</span></a>
+        <a class="sprout" href="#about"><span class="sprout-bubble" style="--g: var(--grad-2)"><span class="sprout-initial">Art</span><img src="images/icons/art.png" alt=""></span><span class="sprout-label">Art &amp; stories</span></a>
+      </div>
+    </div>
+
+    <!-- Branch: Projects (each bubble opens that project) -->
+    <div class="branch">
+      <a class="node node--projects" href="#projects" style="--d: .5s" aria-expanded="false">
+        <span class="node-title">Projects</span>
+        <span class="node-sub">Games and websites</span>
+      </a>
+      <div class="sprouts">
+        <a class="sprout" href="#projects" data-project="episode"><span class="sprout-bubble" style="--g: var(--grad-1)"><span class="sprout-initial">YSC</span><img src="images/episode-cover.jpg" alt=""></span><span class="sprout-label">Your Second Choice</span></a>
+        <a class="sprout" href="#projects" data-project="sprinkle"><span class="sprout-bubble" style="--g: var(--grad-2)"><span class="sprout-initial">SS</span><img src="images/sprinkle-cover.jpg" alt=""></span><span class="sprout-label">Sprinkle Saver</span></a>
+        <a class="sprout" href="#projects" data-project="loreal"><span class="sprout-bubble" style="--g: var(--grad-3)"><span class="sprout-initial">L</span><img src="images/loreal.jpg" alt=""></span><span class="sprout-label">L'Oréal</span></a>
+        <a class="sprout" href="#projects" data-project="nasa"><span class="sprout-bubble" style="--g: var(--grad-4)"><span class="sprout-initial">N</span><img src="images/nasa.jpg" alt=""></span><span class="sprout-label">NASA</span></a>
+        <a class="sprout" href="#projects" data-project="intel"><span class="sprout-bubble" style="--g: var(--grad-5)"><span class="sprout-initial">I</span><img src="images/intel.jpg" alt=""></span><span class="sprout-label">Intel</span></a>
+      </div>
+    </div>
+
+    <!-- Branch: Zombies -->
+    <div class="branch">
+      <a class="node node--zombies" href="#zombies" style="--d: .7s" aria-expanded="false">
+        <span class="node-title">Zombies</span>
+        <span class="node-sub">Easter egg design</span>
+      </a>
+      <div class="sprouts">
+        <a class="sprout" href="#z-concept"><span class="sprout-bubble" style="--g: var(--grad-4)"><span class="sprout-initial">1</span><img src="images/icons/z-concept.png" alt=""></span><span class="sprout-label">Concept</span></a>
+        <a class="sprout" href="#z-map"><span class="sprout-bubble" style="--g: var(--grad-4)"><span class="sprout-initial">2</span><img src="images/icons/z-map.png" alt=""></span><span class="sprout-label">Map</span></a>
+        <a class="sprout" href="#z-flow"><span class="sprout-bubble" style="--g: var(--grad-4)"><span class="sprout-initial">3</span><img src="images/icons/z-flow.png" alt=""></span><span class="sprout-label">Quest flow</span></a>
+        <a class="sprout" href="#z-reward"><span class="sprout-bubble" style="--g: var(--grad-4)"><span class="sprout-initial">4</span><img src="images/icons/z-reward.png" alt=""></span><span class="sprout-label">Reward</span></a>
+      </div>
+    </div>
   </div>
 
   <p class="hero-intro">I design choices that matter: branching stories, game mechanics, and quests players want to solve together.</p>
@@ -100,7 +134,7 @@
     <div class="tiles">
 
       <!-- Project: Your Second Choice -->
-      <article class="tile tile--wide">
+      <article id="project-episode" class="tile tile--wide">
         <div class="tile-art" style="background-image: url('images/episode-cover.jpg'), var(--grad-1)"></div>
         <div class="tile-name"><strong>Your Second Choice</strong><span>Interactive story</span></div>
         <div class="tile-overlay">
@@ -145,7 +179,7 @@
       </article>
 
       <!-- Project: Sprinkle Saver -->
-      <article class="tile">
+      <article id="project-sprinkle" class="tile">
         <div class="tile-art" style="background-image: url('images/sprinkle-cover.jpg'), var(--grad-2)"></div>
         <div class="tile-name"><strong>Sprinkle Saver</strong><span>Arcade platformer</span></div>
         <div class="tile-overlay">
@@ -177,7 +211,7 @@
       </article>
 
       <!-- Project: L'Oréal -->
-      <article class="tile">
+      <article id="project-loreal" class="tile">
         <div class="tile-art" style="background-image: url('images/loreal.jpg'), var(--grad-3)"></div>
         <div class="tile-name"><strong>L'Oréal Routine Builder</strong><span>AI chatbot website</span></div>
         <div class="tile-overlay">
@@ -203,7 +237,7 @@
       </article>
 
       <!-- Project: NASA -->
-      <article class="tile">
+      <article id="project-nasa" class="tile">
         <div class="tile-art" style="background-image: url('images/nasa.jpg'), var(--grad-4)"></div>
         <div class="tile-name"><strong>NASA Space Explorer</strong><span>API web app</span></div>
         <div class="tile-overlay">
@@ -229,7 +263,7 @@
       </article>
 
       <!-- Project: Intel -->
-      <article class="tile">
+      <article id="project-intel" class="tile">
         <div class="tile-art" style="background-image: url('images/intel.jpg'), var(--grad-5)"></div>
         <div class="tile-name"><strong>Intel Sustainability Journey</strong><span>Interactive timeline</span></div>
         <div class="tile-overlay">
@@ -272,17 +306,17 @@
     </dl>
 
     <div class="measure">
-      <h3>Concept</h3>
+      <h3 id="z-concept">Concept</h3>
       <p>[The map setting and story hook in two or three sentences. What happened here, and why are players the ones who can fix it?]</p>
     </div>
 
-    <figure data-placeholder="Add images/zombies-map.jpg: your map sketch with each quest step marked">
+    <figure id="z-map" data-placeholder="Add images/zombies-map.jpg: your map sketch with each quest step marked">
       <img src="images/zombies-map.jpg" alt="Hand-drawn map sketch marking each quest step">
       <figcaption>[What the map shows and how the layout guides players between steps.]</figcaption>
     </figure>
 
     <div class="measure">
-      <h3>Quest flow</h3>
+      <h3 id="z-flow">Quest flow</h3>
       <ol class="steps">
         <li>[Step 1: what triggers the quest and how players first notice it.]</li>
         <li>[Step 2: the first task and the clue that points to the next one.]</li>
@@ -297,7 +331,7 @@
       <h3>Co-op and pacing</h3>
       <p>[How four players share tasks, what happens if someone goes down, and how quest steps fit between zombie rounds so tension builds.]</p>
 
-      <h3>The reward</h3>
+      <h3 id="z-reward">The reward</h3>
       <p>[What finishing gives players and why it feels earned.]</p>
 
       <p class="note">[Optional: one design risk you considered and how you'd test it in a playtest.]</p>
