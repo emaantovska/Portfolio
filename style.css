@@ -97,3 +97,34 @@
     html { scroll-behavior: auto; }
     .map .branch { animation: none; stroke-dashoffset: 0; }
   }
+
+  /* 1. Scroll reveal */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* 2. Hover lift on images */
+figure img { transition: transform .25s ease, box-shadow .25s ease; cursor: zoom-in; }
+figure img:hover { transform: translateY(-4px); box-shadow: 6px 6px 0 var(--pen); }
+
+/* 3. Full-screen image viewer */
+.lightbox { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem; background: rgba(29, 35, 48, .92); opacity: 0; pointer-events: none;
+  transition: opacity .25s ease; cursor: zoom-out; }
+.lightbox.open { opacity: 1; pointer-events: auto; }
+.lightbox img { max-width: 100%; max-height: 100%; border: 2px solid #fff;
+  transform: scale(.96); transition: transform .25s ease; }
+.lightbox.open img { transform: none; }
+
+/* 4. Zombies title flicker */
+#zombies h2.visible { animation: flicker 1.6s linear 1; }
+@keyframes flicker {
+  0%, 100% { opacity: 1; } 8% { opacity: .2; } 10% { opacity: 1; }
+  22% { opacity: .4; } 24% { opacity: 1; } 62% { opacity: .3; } 64% { opacity: 1; }
+}
+
+/* Turn animations off for visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  figure img, .lightbox, .lightbox img { transition: none; }
+  #zombies h2.visible { animation: none; }
+}
