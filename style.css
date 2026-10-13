@@ -205,3 +205,5 @@ body.loading .hero, body.loading main, body.loading footer { opacity: 0; }
   0%, 100% { box-shadow: 0 0 14px rgba(143,180,255,.9), 0 0 36px rgba(143,180,255,.45); }
   50% { box-shadow: 0 0 22px rgba(255,255,255,.95), 0 0 56px rgba(143,180,255,.7); }
 }
+.loader-progress.hide { pointer-events: none; }
+.loader-btn { position: relative; z-index: 1; }
